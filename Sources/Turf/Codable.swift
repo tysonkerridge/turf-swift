@@ -13,6 +13,9 @@ extension Int: JSONType {
 extension String: JSONType {
     public var jsonValue: Any { return self }
 }
+extension Decimal: JSONType {
+    public var jsonValue: Any { return self }
+}
 extension Double: JSONType {
     public var jsonValue: Any { return self }
 }
@@ -40,6 +43,8 @@ public struct AnyJSONType: JSONType {
             jsonValue = boolValue
         } else if let doubleValue = try? container.decode(Double.self) {
             jsonValue = doubleValue
+        } else if let decimalValue = try? container.decode(Decimal.self) {
+            jsonValue = decimalValue
         } else if let doubleValue = try? container.decode([AnyJSONType].self) {
             jsonValue = doubleValue
         } else if let doubleValue = try? container.decode([String: AnyJSONType].self) {
@@ -61,6 +66,8 @@ public struct AnyJSONType: JSONType {
             try container.encode(boolValue)
         } else if let doubleValue = jsonValue as? Double {
             try container.encode(doubleValue)
+        } else if let decimalValue = jsonValue as? Decimal {
+            try container.encode(decimalValue)
         } else if let arrayValue = jsonValue as? [AnyJSONType] {
             try container.encode(arrayValue)
         } else if let dictionaryValue = jsonValue as? [String: AnyJSONType] {
